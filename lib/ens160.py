@@ -20,8 +20,7 @@ class ENS160:
         return (data[0] << 8) | data[1]
 
     def get_firmware_version(self):
-        # Adjust according to actual firmware register if applicable
-        data = self._read_register(0x02, 2)
+        data = self._read_register(0x02, 2)  # Firmware Version
         return (data[0] << 8) | data[1]
 
     def get_status(self):
@@ -70,12 +69,27 @@ class ENS160:
         else:
             return "Unknown"
 
+    def interpret_tvoc_level(self, tvoc):
+        if tvoc <= 50:
+            return "Excellent"
+        elif tvoc <= 100:
+            return "Good"
+        elif tvoc <= 150:
+            return "Moderate"
+        elif tvoc <= 200:
+            return "Unhealthy"
+        elif tvoc <= 300:
+            return "Very Unhealthy"
+        else:
+            return "Hazardous"
+
     def read_air_quality(self):
-        # Read all relevant air quality data
         aqi = self.get_aqi()
         tvoc = self.get_tvoc()
         eco2 = self.get_eco2()
         temp = self.get_temperature()
         rh = self.get_humidity()
         eco2_rating = self.interpret_eco2_level(eco2)
-        return aqi, tvoc, eco2, temp, rh, eco2_rating
+        tvoc_rating = self.interpret_tvoc_level(tvoc)
+        return aqi, tvoc, eco2, temp, rh, eco2_rating, tvoc_rating
+
