@@ -14,18 +14,14 @@ sensor_aht21 = AHT20(i2c)
 
 # Main loop to read and print sensor data
 while True:
-    aqi, tvoc, eco2, _, _, eco2_rating = sensor_ens160.read_air_quality()
-    
-    # Read temperature and humidity from AHT21
-    temp_aht21 = sensor_aht21.temperature
-    rh_aht21 = sensor_aht21.relative_humidity
-    temp_aht21_F = sensor_aht21.temperature * 1.8 + 32
+    aqi, tvoc, eco2, temp, rh, eco2_rating, tvoc_rating = sensor_ens160.read_air_quality()
     
     print(f"AQI: {aqi}")
     print(f"TVOC: {tvoc} ppb")
+    print(f"TVOC Rating: {tvoc_rating}")
     print(f"eCO2: {eco2} ppm")
-    print(f"Temperature (ENS160): {temp_aht21_F:.2f} °F")  # Adjust based on actual sensor data format
-    print(f"Humidity (ENS160): {rh_aht21:.2f} %")   # Print humidity as a percentage
+    print(f"Temperature: {temp:.2f} °C")
+    print(f"Humidity: {rh:.2f} %")
     print(f"eCO2 Rating: {eco2_rating}")
     
     time.sleep(2)  # Delay between readings
